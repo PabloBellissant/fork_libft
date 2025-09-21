@@ -6,7 +6,7 @@
 #    By: lmarcucc <lucas@student.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/08 09:14:34 by jaubry--          #+#    #+#              #
-#    Updated: 2025/03/19 19:55:55 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/09/21 15:51:34 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,9 @@ STR_SRCS	= ft_strlen.c \
 			  ft_striteri.c ft_strmapi.c \
 			  ft_strjoin.c freejoin.c dfreejoin.c ft_strjoin_all.c
 SRCS		+= $(addprefix $(STR_DIR)/, $(STR_SRCS))
+
+STRF_MK		= strf/strf.mk
+include $(addprefix $(STR_DIR)/, $(STRF_MK))
 
 # VPATH
 vpath %.c $(STR_DIR)
