@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 07:36:56 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/08/07 07:07:49 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/09/21 16:11:52 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,28 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*freejoin(char *s1, const char *s2);
 char	*dfreejoin(char *s1, char *s2);
 char	*ft_strjoin_all(size_t	str_nb, ...);
+
+/* --------------------------- String format utils -------------------------- */
+
+size_t	strf_putnbr(char *output, size_t len, long int nb);
+
+# define HEX_MAJ "0123456789ABCDEF"
+# define HEX_MIN "0123456789abcdef"
+
+size_t	strf_puthex(char *output, size_t len, long unsigned int nb, bool maj);
+
+# define STR_NULL "(null)"
+
+size_t	strf_putstr(char *output, const size_t len, const char *str);
+
+# define PTR_NIL "(nil)"
+# define HEX_PREFIX "0x"
+
+size_t	strf_putptr(char *output, size_t len, long unsigned int ptr);
+
+void	strf(char *output, const size_t len, const char *format, ...)
+		__attribute__((format(printf, 3, 4)));
+void	strfv(char *output, const size_t len, const char *format, va_list args);
 
 //
 //
