@@ -56,14 +56,16 @@ static void	print_exceed_size(int actual_line, int min, int max)
 	ft_putnbr_fd(actual_line, 2);
 	ft_putstr_fd("'\n", 2);
 }
-
 static bool	str_is_integer(char *line)
 {
 	if (*line == '+' || *line == '-')
 		++line;
 	while (ft_isdigit(*line))
 		++line;
-	if (!*line || !ft_isspace(*line) || *line == ',' || *line == '\n')
+	if (!*line || ft_isspace(*line) || *line == ',' || *line == '/'
+		|| *line == '\n')
+	{
 		return (true);
+	}
 	return (false);
 }

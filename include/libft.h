@@ -192,6 +192,7 @@ typedef union u_result
 	float	*float_t;
 	int		*int_t;
 	uint8_t	*uint8_t;
+	char	**string;
 }	t_result;
 
 int		ft_scan(int line_num, char *format, char *line, ...);

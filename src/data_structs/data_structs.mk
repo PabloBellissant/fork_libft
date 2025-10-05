@@ -42,6 +42,7 @@ VECTOR_SRCS	= vector_add.c \
 			  set_vector_size.c \
 			  remove_vector_elem.c \
 			  get_vector_value.c \
+			  get_last_vector_value.c \
 			  free_vector.c
 VECTOR_SRCS	:= $(addprefix $(VECTOR_DIR)/, $(VECTOR_SRCS))
 
