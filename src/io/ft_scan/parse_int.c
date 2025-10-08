@@ -14,11 +14,11 @@
 #include <errno.h>
 #include "libft.h"
 
-static bool	str_is_integer(char *line);
+static bool	str_is_integer(const char *line);
 static void	print_val_not_range(int actual_line);
 static void	print_exceed_size(int actual_line, int min, int max);
 
-int	parse_int(char *line, int line_number, t_limits limits)
+int	parse_int(const char *line, int line_number, t_limits limits)
 {
 	int	result;
 
@@ -56,7 +56,8 @@ static void	print_exceed_size(int actual_line, int min, int max)
 	ft_putnbr_fd(actual_line, 2);
 	ft_putstr_fd("'\n", 2);
 }
-static bool	str_is_integer(char *line)
+
+static bool	str_is_integer(const char *line)
 {
 	if (*line == '+' || *line == '-')
 		++line;

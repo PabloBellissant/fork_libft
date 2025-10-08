@@ -174,7 +174,7 @@ void	*ft_realloc(void *pnt, size_t old_size, size_t size);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
-void	ft_putstr_fd(char *s, int fd);
+void	ft_putstr_fd(const char *s, int fd);
 int		ft_printf(const char *format, ...);
 int		ft_dprintf(int fd, const char *format, ...);
 int		ft_vdprintf(int fd, const char *format, va_list ap);
@@ -195,7 +195,7 @@ typedef union u_result
 	char	**string;
 }	t_result;
 
-int		ft_scan(int line_num, char *format, char *line, ...);
+int		ft_scan(int line_num, const char *format, const char *line, ...);
 
 //
 //
@@ -274,6 +274,7 @@ void	vector_init(t_vector *vector, size_t element_size);
 int		vector_add(t_vector *vector, void *element, size_t elem_count);
 
 void	*get_vector_value(t_vector *vector, size_t i);
+void	*get_last_vector_value(t_vector *vector);
 
 void	free_vector(t_vector *vector);
 int		vector_realloc(t_vector *vector);
