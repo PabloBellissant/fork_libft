@@ -18,39 +18,34 @@
 #include <limits.h>
 #include "libft.h"
 
-float			parse_float(char *line, int line_number, t_limits limits);
-int				parse_int(char *line, int line_number, t_limits limits);
-static t_limits	limits(char type, char *format);
-static char		*get_end_token(char *line);
+float			parse_float(const char *line, int line_number, t_limits limits);
+int				parse_int(const char *line, int line_number, t_limits limits);
+static t_limits	limits(char type, const char *format);
+static const char		*get_end_token(const char *line, const char *format);
+char			*parse_str(const char *line);
 
-int	parse_type(va_list *args, char **line, int line_num, char *format)
+int	parse_type(va_list *args, const char **line,
+	int line_num, const char *format)
 {
 	t_result	result;
 
+	errno = 0;
+	result.float_t = va_arg(*args, void *);
 	if (*format == 'f')
-	{
-		result.float_t = va_arg(*args, float *);
 		*result.float_t = parse_float(*line, line_num, limits(*format, format));
-		if (*result.float_t == NAN)
-			return (-1);
-	}
 	else if (*format == 'd')
-	{
-		result.int_t = va_arg(*args, int *);
 		*result.int_t = parse_int(*line, line_num, limits(*format, format));
-	}
 	else if (*format == '8')
-	{
-		result.uint8_t = va_arg(*args, uint8_t *);
 		*result.uint8_t = parse_int(*line, line_num, limits(*format, format));
-	}
-	if (errno == EINVAL)
+	else if (*format == 's')
+		*result.string = parse_str(*line);
+	if (errno != 0)
 		return (-1);
-	*line = get_end_token(*line);
+	*line = get_end_token(*line, format);
 	return (0);
 }
 
-static t_limits	limits(char type, char *format)
+static t_limits	limits(char type, const char *format)
 {
 	int	temp;
 
@@ -61,7 +56,7 @@ static t_limits	limits(char type, char *format)
 			return ((t_limits){INT_MIN, INT_MAX});
 		if (type == '8')
 			return ((t_limits){0, 255});
-		return ((t_limits){-2147483648, 2147483647});
+		return ((t_limits){INT_MIN, INT_MAX});
 	}
 	++format;
 	if (!ft_strchr(format, ',')
@@ -74,9 +69,18 @@ static t_limits	limits(char type, char *format)
 	return ((t_limits){temp, ft_atoi(format)});
 }
 
-static char	*get_end_token(char *line)
+static const char	*get_end_token(const char *line, const char *format)
 {
-	while (*line && !ft_isspace(*line) && *line != '\n' && *line != ',')
+	if (*format == 's')
+	{
+		while (*line && !ft_isspace(*line) && *line != '\n')
+			++line;
+		return (line);
+	}
+	while (*line && !ft_isspace(*line) && *line != '\n' && *line != ','
+		&& *line != '/')
+	{
 		++line;
+	}
 	return (line);
 }

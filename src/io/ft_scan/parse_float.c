@@ -13,11 +13,11 @@
 #include <math.h>
 #include "libft.h"
 
-static bool	str_is_float(char *line);
+static bool	str_is_float(const char *line);
 static void	print_exceed_size(int actual_line, int min, int max);
 static void	print_not_a_float(int actual_line);
 
-float	parse_float(char *line, int line_number, t_limits limits)
+float	parse_float(const char *line, int line_number, t_limits limits)
 {
 	float	result;
 
@@ -37,7 +37,7 @@ float	parse_float(char *line, int line_number, t_limits limits)
 	return (result);
 }
 
-static bool	str_is_float(char *line)
+static bool	str_is_float(const char *line)
 {
 	int	i;
 
