@@ -14,16 +14,16 @@
 #include <unistd.h>
 #include "libft.h"
 
-static void	skip_wildcard(char **line, char char_to_skip);
-int			parse_type(va_list *args, char **line, int line_num, char *format);
-static void	wrong_char_error(int line_num, char needed, char found);
-static int	verif_char(char *format, char **line, int line_num);
-static char	*skip_range(char *format);
+static void			skip_wildcard(const char **line, char char_to_skip);
+int					parse_type(va_list *args, const char **line, int line_num, const char *format);
+static void			wrong_char_error(int line_num, char needed, char found);
+static int			verif_char(const char *format, const char **line, int line_num);
+static const char	*skip_range(const char *format);
 
-void	scan_optional_arg(va_list *args, char **format, char **line)
+void	scan_optional_arg(va_list *args, const char **format, const char **line)
 {
 	va_list	copy;
-	char	*line_backup;
+	const char	*line_backup;
 
 	line_backup = *line;
 	++*format;
@@ -55,7 +55,7 @@ void	scan_optional_arg(va_list *args, char **format, char **line)
 	*format = ft_strchr(*format, ')') + 1;
 }
 
-int	ft_scan(int line_num, char *format, char *line, ...)
+int	ft_scan(int line_num, const char *format, const char *line, ...)
 {
 	va_list		args;
 
@@ -83,14 +83,14 @@ int	ft_scan(int line_num, char *format, char *line, ...)
 	return (0);
 }
 
-static char	*skip_range(char *format)
+static const char	*skip_range(const char *format)
 {
 	if (format[1] == '[')
 		format = ft_strchr(format, ']');
 	return (format);
 }
 
-static int	verif_char(char *format, char **line, int line_num)
+static int	verif_char(const char *format, const char **line, int line_num)
 {
 	if (*format != **line && !(**line == '\0' && *format == '\n')
 		&& !(ft_isspace(*format) && ft_isspace(**line)))
@@ -118,7 +118,7 @@ static void	wrong_char_error(int line_num, char needed, char found)
 	ft_putstr_fd("'\n", 2);
 }
 
-static void	skip_wildcard(char **line, const char char_to_skip)
+static void	skip_wildcard(const char **line, const char char_to_skip)
 {
 	while (**line == char_to_skip
 		|| (ft_isspace(char_to_skip) && ft_isspace(**line)))
