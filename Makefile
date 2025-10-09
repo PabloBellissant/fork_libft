@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/27 01:19:17 by jaubry--          #+#    #+#              #
-#    Updated: 2025/08/21 20:26:28 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/10/09 19:32:27 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,14 +20,23 @@ INCDIR		= include
 OBJDIR		= .obj
 DEPDIR		= .dep
 
+XCERRCALDIR	= $(LIBDIR)/xcerrcal
+
 # Output
 NAME		= libft.a
+XCERRCAL	= $(XCERRCALDIR)/libxcerrcal.a
+
 
 # Compiler and flags
 CC			= cc
+
 CFLAGS		= -Wall -Wextra -Werror
+
 DFLAGS		= -MMD -MP -MF $(DEPDIR)/$*.d
-IFLAGS		= -I$(INCDIR)
+
+IFLAGS		= -I$(INCDIR) -I$(XCERRCALDIR)/include
+
+LFLAGS		= -L$(XCERRCALDIR) -lxcerrcal
 
 VARS		= DEBUG=$(DEBUG)
 VFLAGS		= $(addprefix -D ,$(VARS))
@@ -40,17 +49,12 @@ ARFLAGS		= rcs
 RANLIB      = $(if $(findstring -flto,$(FFLAGS)),$(FAST_RANLIB),$(STD_RANLIB))
 
 # VPATH
-vpath %.h $(INCDIR)
-vpath %.o $(OBJDIR)
-vpath %.d $(DEPDIR)
+vpath %.h $(INCDIR) $(XCERRCALDIR)/$(INCDIR)
+vpath %.o $(OBJDIR) $(XCERRCALDIR)/$(OBJDIR)
+vpath %.d $(DEPDIR) $(XCERRCALDIR)/$(DEPDIR)
 
 # Sources
-MKS			= io/io.mk alloc/alloc.mk parsing/parsing.mk \
-			  conversion/conversion.mk mem_utils/mem_utils.mk \
-			  str_utils/str_utils.mk strr_utils/strr_utils.mk \
-			  data_structs/data_structs.mk utils/utils.mk
-
-include $(addprefix $(SRCDIR)/, $(MKS))
+include $(SRCDIR)/srcs.mk
 
 OBJS		= $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 DEPS		= $(addprefix $(DEPDIR)/, $(notdir $(SRCS:.o=.d)))
@@ -61,13 +65,16 @@ all:	$(NAME)
 fast:	$(NAME)
 debug:	$(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(XCERRCAL) $(OBJS)
 	$(call ar-msg)
 	@$(AR) $(ARFLAGS) $@ $^
 ifeq ($(FAST),1)
 	@$(RANLIB) $@
 endif
 	$(call ar-finish-msg)
+
+$(XCERRCAL):
+	@$(MAKE) -s -C $(XCERRCALDIR) $(RULE) $(VARS) ROOTDIR=../..
 
 $(OBJDIR)/%.o: %.c | buildmsg $(OBJDIR) $(DEPDIR)
 	$(call lib-compile-obj-msg)
@@ -89,11 +96,15 @@ help:
 	@echo "  fclean  : Remove object files and library"
 	@echo "  re      : Rebuild everything"
 
+print-% : ; $(info $* is a $(flavor $*) variable set to [$($*)]) @true
+
 clean:
+	@$(MAKE) -s -C $(XCERRCALDIR) clean ROOTDIR=../..
 	$(call rm-obj-msg)
 	@rm -rf $(OBJDIR) $(DEPDIR)
 
 fclean: clean
+	@$(MAKE) -s -C $(XCERRCALDIR) fclean ROOTDIR=../..
 	$(call rm-lib-msg)
 	@rm -f $(NAME)
 
@@ -101,4 +112,4 @@ re: fclean all
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re debug help buildmsg
+.PHONY: all clean fclean re debug help buildmsg print-%

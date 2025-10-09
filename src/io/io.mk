@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/08 08:58:24 by jaubry--          #+#    #+#              #
-#    Updated: 2025/07/23 00:38:22 by jaubry--         ###   ########lyon.fr    #
+#    Updated: 2025/10/09 19:34:13 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ HANDLE_DIR	= $(PRINTFS_DIR)/handlers
 # Source files
 PUT_SRCS	= ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c
 
-GNL_SRCS	= get_next_line.c get_next_line_utils.c
+GNL_SRCS	= get_next_line.c
 GNL_SRCS	:= $(addprefix $(GNL_DIR)/, $(GNL_SRCS))
 
 SCAN_SRCS	= ft_scan.c parse_float.c parse_int.c parse_type.c parse_str.c
