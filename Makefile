@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/27 01:19:17 by jaubry--          #+#    #+#              #
-#    Updated: 2025/10/09 15:12:06 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/10/09 19:30:29 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,6 @@ XCERRCALDIR	= $(LIBDIR)/xcerrcal
 # Output
 NAME		= libft.a
 XCERRCAL	= $(XCERRCALDIR)/libxcerrcal.a
-ARCHIVES	= $(XCERRCAL)
 
 # Compiler and flags
 CC			= cc
@@ -38,9 +37,8 @@ IFLAGS		= -I$(INCDIR) -I$(XCERRCALDIR)/include
 
 LFLAGS		= -L$(XCERRCALDIR) -lxcerrcal
 
-VFLAGS		= -D DEBUG=$(DEBUG)
-
 VARS		= DEBUG=$(DEBUG)
+VFLAGS		= $(addprefix -D ,$(VARS))
 
 CFLAGS		+= $(DEBUG_FLAGS) $(FFLAGS) $(VFLAGS)
 CF			= $(CC) $(CFLAGS) $(IFLAGS)
@@ -75,7 +73,7 @@ endif
 	$(call ar-finish-msg)
 
 $(XCERRCAL):
-	$(MAKE) -C $(XCERRCALDIR) $(RULE) $(VARS) ROOTDIR=../.. LIBFTDIR=../../../libft
+	@$(MAKE) -s -C $(XCERRCALDIR) $(RULE) $(VARS) ROOTDIR=../.. LIBFTDIR=../../../libft
 
 $(OBJDIR)/%.o: %.c | buildmsg $(OBJDIR) $(DEPDIR)
 	$(call lib-compile-obj-msg)
