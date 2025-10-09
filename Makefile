@@ -6,7 +6,7 @@
 #    By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/27 01:19:17 by jaubry--          #+#    #+#              #
-#    Updated: 2025/10/09 19:32:27 by jaubry--         ###   ########.fr        #
+#    Updated: 2025/10/09 20:14:20 by jaubry--         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -103,8 +103,10 @@ clean:
 	$(call rm-obj-msg)
 	@rm -rf $(OBJDIR) $(DEPDIR)
 
-fclean: clean
+fclean:
 	@$(MAKE) -s -C $(XCERRCALDIR) fclean ROOTDIR=../..
+	$(call rm-obj-msg)
+	@rm -rf $(OBJDIR) $(DEPDIR)
 	$(call rm-lib-msg)
 	@rm -f $(NAME)
 
