@@ -6,17 +6,19 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 20:37:41 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/03/01 01:31:05 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 19:00:22 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "get_next_line_utils.h"
 
-size_t	get_line_len(char *str);
+static inline size_t	get_line_len(char *str);
 
-void	shift_back(char *dest, char *src);
+static inline void		shift_back(char *dest, char *src);
 
-char	*ft_get_line(int fd, char *s_spill, ssize_t read_len, size_t sep_len);
+static inline char		*ft_get_line(int fd, char *s_spill,
+							ssize_t read_len, size_t sep_len);
 
 /*
 	Function that returns each line of the fd.
@@ -30,12 +32,12 @@ char	*get_next_line(int fd)
 	sep_len = 0;
 	line = NULL;
 	if ((fd > MAX_FD) || (fd < 0) || (BUFFER_SIZE <= 0))
-		return (NULL);
+		return (nul_error(pack_err(LFT_ID, LFT_E_CRITGNL), FL, LN, FC));
 	if (s_spill[fd][0])
 		sep_len = get_line_len(s_spill[fd]);
 	if (sep_len)
 	{
-		line = ft_strndup_gnl(s_spill[fd], sep_len);
+		line = ft_strndup(s_spill[fd], sep_len);
 		shift_back(s_spill[fd], s_spill[fd] + sep_len);
 	}
 	else
@@ -46,7 +48,7 @@ char	*get_next_line(int fd)
 /*
 	Function that returns the position of the next \n or 0.
 */
-size_t	get_line_len(char *str)
+static inline size_t	get_line_len(char *str)
 {
 	size_t	i;
 
@@ -64,7 +66,7 @@ size_t	get_line_len(char *str)
 	Function that moves and copy from src to dest, meant to be used
 	with stack allocated arrays and arrays that do NOT overlap
 */
-void	shift_back(char *dest, char *src)
+static inline void	shift_back(char *dest, char *src)
 {
 	size_t	i;
 
@@ -81,14 +83,14 @@ void	shift_back(char *dest, char *src)
 	Function that reads and add to the buffer, until finding a sep or EOF
 	Sets any overflow to the leftover static variable.
 */
-char	*ft_get_line(int fd, char *s_spill, ssize_t read_len, size_t sep_len)
+static inline char	*ft_get_line(int fd, char *s_spill, ssize_t read_len, size_t sep_len)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	char	*line;
 
 	if (*s_spill)
 	{
-		line = ft_strndup_gnl(s_spill, 0);
+		line = ft_strdup(s_spill);
 		ft_memset(s_spill, 0, sizeof(s_spill));
 	}
 	else
@@ -104,7 +106,7 @@ char	*ft_get_line(int fd, char *s_spill, ssize_t read_len, size_t sep_len)
 			shift_back(s_spill, buffer + sep_len);
 			buffer[sep_len] = '\0';
 		}
-		line = ft_strjoin_gnl(line, buffer);
+		line = ft_strjoin(line, buffer);
 		if (sep_len || !line || (read_len == 0))
 			return (line);
 	}

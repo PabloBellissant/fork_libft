@@ -6,7 +6,7 @@
 /*   By: lmarcucc <lucas@student.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 19:19:45 by lmarcucc          #+#    #+#             */
-/*   Updated: 2025/03/13 19:20:05 by lmarcucc         ###   ########.fr       */
+/*   Updated: 2025/10/09 17:53:56 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ char	*ft_strcrop(const char *str, int c)
 	size_t	j;
 
 	if (!str)
-		return (NULL);
+		return (nul_error(pack_err(LFT_ID, LFT_E_STRNULL), FL, LN, FC));
 	i = 0;
-	while (str[i] && str[i] != c)
+	while (str[i] && (str[i] != c))
 		i++;
 	res = ft_calloc(i + 1, sizeof(char));
 	if (!res)

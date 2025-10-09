@@ -6,7 +6,7 @@
 /*   By: lmarcucc <lucas@student.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 18:12:47 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/10/09 15:08:00 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 19:02:02 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	free_strr(char **strs)
 	ft_free(strs);
 }
 
-void	free_strr_fail(char **strs, size_t size)
+bool	free_strr_fail(char **strs, size_t size)
 {
 	size_t	i;
 
@@ -49,6 +49,7 @@ void	free_strr_fail(char **strs, size_t size)
 		i++;
 	}
 	free(strs);
+	return (true);
 }
 
 char	**ft_strrdup(char **strs)
@@ -57,7 +58,7 @@ char	**ft_strrdup(char **strs)
 	size_t	i;
 
 	if (!strs)
-		return (NULL);
+		return (nul_error(pack_err(LFT_ID, LFT_E_STRNULL), FL, LN, FC));
 	i = 0;
 	new = ft_calloc(ft_strrlen(strs) + 1, sizeof(char *));
 	if (!new)
@@ -65,8 +66,8 @@ char	**ft_strrdup(char **strs)
 	while (strs[i])
 	{
 		new[i] = ft_strdup(strs[i]);
-		if (!new[i])
-			return (free_strr_fail(new, i), NULL);
+		if (!new[i] && free_strr_fail(new, i))
+			return (nul_error(pack_err(LFT_ID, LFT_E_STRDUP), FL, LN, FC));
 		i++;
 	}
 	return (new);
@@ -79,20 +80,20 @@ int	strr_add(char ***strs, char *str)
 
 	i = 0;
 	if (!strs || !*strs)
-		return (1);
+		return (error(pack_err(LFT_ID, LFT_E_STRNULL), FL, LN, FC));
 	new = ft_calloc(ft_strrlen(*strs) + 2, sizeof(char *));
 	if (!new)
 		return (1);
 	while ((*strs)[i])
 	{
 		new[i] = ft_strdup((*strs)[i]);
-		if (!new[i])
-			return (free_strr_fail(new, i), 1);
+		if (!new[i] && free_strr_fail(new, i))
+			return (error(pack_err(LFT_ID, LFT_E_STRDUP), FL, LN, FC));
 		i++;
 	}
 	new[i] = ft_strdup(str);
-	if (!new[i])
-		return (free_strr_fail(new, i), 1);
+	if (!new[i] && free_strr_fail(new, i))
+		return (error(pack_err(LFT_ID, LFT_E_STRDUP), FL, LN, FC));
 	free_strr(*strs);
 	*strs = new;
 	return (0);

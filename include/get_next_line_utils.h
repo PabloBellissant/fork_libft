@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 20:37:48 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/03/01 01:29:29 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 18:56:33 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,5 @@
 # define MAX_FD 1024
 
 char	*get_next_line(int fd);
-
-char	*ft_strjoin_gnl(char *s1, char *s2);
-
-char	*ft_strndup_gnl(char *str, size_t n);
 
 #endif

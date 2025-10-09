@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 06:42:55 by jaubry--          #+#    #+#             */
-/*   Updated: 2024/11/14 09:48:07 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 19:00:42 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*join;
 
 	if (!s1 || !s2)
-		return (NULL);
+		return (nul_error(pack_err(LFT_ID, LFT_E_STRNULL), FL, LN, FC));
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	join = ft_calloc(sizeof(char), (s1_len + s2_len + 1));
