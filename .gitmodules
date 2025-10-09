@@ -1,3 +1,7 @@
 [submodule "mkidir"]
 	path = mkidir
 	url = git@github.com:dct-LuLu/mkidir.git
+[submodule "lib/xcerrcal"]
+	path = lib/xcerrcal
+	url = git@github.com:dct-LuLu/xcerrcal.git
+	branch = library-stripped

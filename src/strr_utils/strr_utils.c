@@ -6,7 +6,7 @@
 /*   By: lmarcucc <lucas@student.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 18:12:47 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/08/13 14:43:34 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 15:08:00 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ char	**ft_strrdup(char **strs)
 	char	**new;
 	size_t	i;
 
+	if (!strs)
+		return (NULL);
 	i = 0;
 	new = ft_calloc(ft_strrlen(strs) + 1, sizeof(char *));
 	if (!new)
@@ -76,6 +78,8 @@ int	strr_add(char ***strs, char *str)
 	size_t	i;
 
 	i = 0;
+	if (!strs || !*strs)
+		return (1);
 	new = ft_calloc(ft_strrlen(*strs) + 2, sizeof(char *));
 	if (!new)
 		return (1);
