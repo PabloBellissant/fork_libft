@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 08:27:09 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/07/23 00:25:53 by jaubry--         ###   ########lyon.fr   */
+/*   Updated: 2025/10/09 19:09:20 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	*ft_calloc(size_t len, size_t size)
 	void	*alloc;
 
 	bytes = len * size;
-	if (((bytes != 0) && (bytes < len || bytes < size)))
-		return (NULL);
+	if (((bytes != 0) && ((bytes < len) || (bytes < size))))
+		return (nul_error(pack_err(LFT_ID, LFT_E_CALC_S), FL, LN, FC));
 	alloc = malloc(bytes);
 	if (!alloc)
 		return (NULL);

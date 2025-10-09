@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 07:36:56 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/09/21 16:11:52 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 18:06:55 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdbool.h>
 # include <stdarg.h>
 # include <stdint.h>
+# include "xcerrcal.h"
+# include "lft_xcerrcal.h"
 # include "vectors.h"
 
 # define VECTOR_BASE_SIZE 128
@@ -147,7 +149,7 @@ char	**split_by_char(const char *str, bool is_char(char));
 char	**ft_strrdup(char **strs);
 size_t	ft_strrlen(char **strs);
 void	free_strr(char **strs);
-void	free_strr_fail(char **strs, size_t size);
+bool	free_strr_fail(char **strs, size_t size);
 int		strr_add(char ***strs, char *str);
 
 //
