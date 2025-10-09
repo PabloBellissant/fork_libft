@@ -3,111 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: pabellis <mail@bellissantpablo.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 20:37:41 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/10/09 19:00:22 by jaubry--         ###   ########.fr       */
+/*   Created: 2025/03/02 18:34:46 by pabellis          #+#    #+#             */
+/*   Updated: 2025/10/09 20:48:19 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
+#include <stdlib.h>
 #include "libft.h"
-#include "get_next_line_utils.h"
 
-static inline size_t	get_line_len(char *str);
+static ssize_t    read_buffer_first(char *buffer, t_vector *vec, int fd);
+static char        *put_to_buffer(t_vector *vec, char *buffer);
+static int        set_size(t_vector *vec);
 
-static inline void		shift_back(char *dest, char *src);
-
-static inline char		*ft_get_line(int fd, char *s_spill,
-							ssize_t read_len, size_t sep_len);
-
-/*
-	Function that returns each line of the fd.
-*/
-char	*get_next_line(int fd)
+char    *get_next_line(int fd)
 {
-	static char	s_spill[MAX_FD + 1][BUFFER_SIZE + 1];
-	char		*line;
-	size_t		sep_len;
+    static char    buffer[BUFFER_SIZE];
+    ssize_t        i;
+    t_vector    vec;
 
-	sep_len = 0;
-	line = NULL;
-	if ((fd > MAX_FD) || (fd < 0) || (BUFFER_SIZE <= 0))
-		return (nul_error(pack_err(LFT_ID, LFT_E_CRITGNL), FL, LN, FC));
-	if (s_spill[fd][0])
-		sep_len = get_line_len(s_spill[fd]);
-	if (sep_len)
-	{
-		line = ft_strndup(s_spill[fd], sep_len);
-		shift_back(s_spill[fd], s_spill[fd] + sep_len);
-	}
-	else
-		line = ft_get_line(fd, s_spill[fd], 0, 0);
-	return (line);
+    vector_init(&vec, sizeof(char));
+    i = BUFFER_SIZE;
+    while (i > 0)
+    {
+        if (set_size(&vec) == -1)
+        {
+            free(vec.data);
+            return (nul_error(pack_err(LFT_ID, LFT_E_VEC_RESIZE), FL, LN, FC));
+        }
+        i = read_buffer_first(buffer, &vec, fd);
+        if ((i == -1) || (vec.num_elements == 0))
+        {
+            free(vec.data);
+            return (NULL);
+        }
+        if (put_to_buffer(&vec, buffer) != NULL)
+            return (vec.data);
+    }
+    ((char *)vec.data)[vec.num_elements] = 0;
+    return (vec.data);
 }
 
-/*
-	Function that returns the position of the next \n or 0.
-*/
-static inline size_t	get_line_len(char *str)
+static int    set_size(t_vector *vec)
 {
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\n')
-			return (i + 1);
-		i++;
-	}
-	return (0);
+    if ((vec->max_elements - vec->num_elements) <= BUFFER_SIZE)
+    {
+        if (set_vector_size(vec, BUFFER_SIZE + vec->num_elements) == -1)
+            return (-1);
+    }
+    return (0);
 }
 
-/*
-	Function that moves and copy from src to dest, meant to be used
-	with stack allocated arrays and arrays that do NOT overlap
-*/
-static inline void	shift_back(char *dest, char *src)
+static char    *put_to_buffer(t_vector *vec, char *buffer)
 {
-	size_t	i;
+    char    *new_line;
+    size_t    size_to_put;
 
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
+    new_line = ft_memchr(vec->data, '\n', vec->num_elements);
+    if (new_line != NULL)
+    {
+        size_to_put = ((char *)(vec->data + vec->num_elements) - new_line - 1);
+        ft_memcpy(buffer, new_line + 1, size_to_put);
+        buffer[size_to_put] = 0;
+        *(new_line + 1) = 0;
+        return (vec->data);
+    }
+    return (NULL);
 }
 
-/*
-	Function that reads and add to the buffer, until finding a sep or EOF
-	Sets any overflow to the leftover static variable.
-*/
-static inline char	*ft_get_line(int fd, char *s_spill, ssize_t read_len, size_t sep_len)
+static ssize_t    read_buffer_first(char *buffer, t_vector *vec, int fd)
 {
-	char	buffer[BUFFER_SIZE + 1];
-	char	*line;
+    ssize_t    buffer_len;
+    ssize_t    output;
 
-	if (*s_spill)
-	{
-		line = ft_strdup(s_spill);
-		ft_memset(s_spill, 0, sizeof(s_spill));
-	}
-	else
-		line = ft_calloc(sizeof(char), 1);
-	while (1)
-	{
-		read_len = read(fd, ft_memset(buffer, 0, sizeof(buffer)), BUFFER_SIZE);
-		if ((read_len < 0) || ((read_len == 0) && (!*line)))
-			return (free(line), ft_memset(s_spill, 0, sizeof(s_spill)), NULL);
-		sep_len = get_line_len(buffer);
-		if (sep_len)
-		{
-			shift_back(s_spill, buffer + sep_len);
-			buffer[sep_len] = '\0';
-		}
-		line = ft_strjoin(line, buffer);
-		if (sep_len || !line || (read_len == 0))
-			return (line);
-	}
+    buffer_len = ft_strlen(buffer);
+    if (buffer_len > 0)
+    {
+        ft_memcpy((char *)vec->data + vec->num_elements, buffer, buffer_len);
+        buffer[0] = 0;
+        vec->num_elements += buffer_len;
+        return (BUFFER_SIZE);
+    }
+    output = read(fd, vec->data + vec->num_elements, BUFFER_SIZE);
+    vec->num_elements += output;
+    return (output);
 }

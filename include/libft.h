@@ -6,7 +6,7 @@
 /*   By: jaubry-- <jaubry--@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 07:36:56 by jaubry--          #+#    #+#             */
-/*   Updated: 2025/10/09 18:06:55 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/09 20:47:26 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,8 @@ int		ft_dprintf(int fd, const char *format, ...);
 int		ft_vdprintf(int fd, const char *format, va_list ap);
 
 /* ---------------------------------- Input --------------------------------- */
+# define BUFFER_SIZE 256
+# define MAX_FD 1024
 char	*get_next_line(int fd);
 typedef struct s_limits
 {
