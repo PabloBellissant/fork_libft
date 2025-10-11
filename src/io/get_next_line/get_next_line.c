@@ -6,7 +6,7 @@
 /*   By: pabellis <mail@bellissantpablo.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 18:34:46 by pabellis          #+#    #+#             */
-/*   Updated: 2025/10/09 20:48:19 by jaubry--         ###   ########.fr       */
+/*   Updated: 2025/10/11 03:11:01 by jaubry--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int        set_size(t_vector *vec);
 
 char    *get_next_line(int fd)
 {
-    static char    buffer[BUFFER_SIZE];
+    static char    buffer[MAX_FD][BUFFER_SIZE];
     ssize_t        i;
     t_vector    vec;
 
@@ -33,13 +33,13 @@ char    *get_next_line(int fd)
             free(vec.data);
             return (nul_error(pack_err(LFT_ID, LFT_E_VEC_RESIZE), FL, LN, FC));
         }
-        i = read_buffer_first(buffer, &vec, fd);
+        i = read_buffer_first(buffer[fd], &vec, fd);
         if ((i == -1) || (vec.num_elements == 0))
         {
             free(vec.data);
             return (NULL);
         }
-        if (put_to_buffer(&vec, buffer) != NULL)
+        if (put_to_buffer(&vec, buffer[fd]) != NULL)
             return (vec.data);
     }
     ((char *)vec.data)[vec.num_elements] = 0;
