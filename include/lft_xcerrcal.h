@@ -66,7 +66,7 @@ typedef enum e_lft_err
 #define LFT_E_MSG_NOT_INT "Invalid integer, line: %d"
 #define LFT_E_MSG_FLT_RANGE "Float not in range [%d:%d], line: %d"
 #define LFT_E_MSG_INT_RANGE "Integer not in range [%d:%d], line: %d"
-#define LFT_E_MSG_WRN_CHAR "\"%c\" is not a valid character, expecting \"%c\""
+#define LFT_E_MSG_WRN_CHAR "`%c` is not a valid character, expecting `%c`"
 
 void	register_lft_errors(void);
 
