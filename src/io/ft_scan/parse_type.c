@@ -13,7 +13,6 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <math.h>
 #include <errno.h>
 #include <limits.h>
 #include "libft.h"

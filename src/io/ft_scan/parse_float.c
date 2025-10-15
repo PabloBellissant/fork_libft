@@ -14,8 +14,6 @@
 #include "libft.h"
 
 static bool	str_is_float(const char *line);
-static void	print_exceed_size(int actual_line, int min, int max);
-static void	print_not_a_float(int actual_line);
 
 float	parse_float(const char *line, int line_number, t_limits limits)
 {
@@ -23,16 +21,21 @@ float	parse_float(const char *line, int line_number, t_limits limits)
 
 	if (!str_is_float(line))
 	{
-		print_not_a_float(line_number);
-		return (NAN);
+		register_complex_err_msg(LFT_E_MSG_NOT_FLT, line_number);
+		error(pack_err(LFT_ID, LFT_E_NOT_FLT), FL, LN, FC);
+		errno = EINVAL;
+		return (-1);
 	}
 	if (*line == '+')
 		++line;
 	result = ft_atod(line);
 	if (result > limits.max || result < limits.min)
 	{
-		print_exceed_size(line_number, limits.min, limits.max);
-		return (NAN);
+		register_complex_err_msg(LFT_E_MSG_FLT_RANGE, limits.min, limits.max,
+			line_number);
+		error(pack_err(LFT_ID, LFT_E_FLT_RANGE), FL, LN, FC);
+		errno = EINVAL;
+		return (-1);
 	}
 	return (result);
 }
@@ -55,22 +58,4 @@ static bool	str_is_float(const char *line)
 	if (*line && line[i] != '\0' && !ft_isspace(line[i]) && line[i] != ',')
 		return (false);
 	return (true);
-}
-
-static void	print_not_a_float(int actual_line)
-{
-	ft_putstr_fd("Error\nInvalid float format on line : '", 2);
-	ft_putnbr_fd(actual_line, 2);
-	ft_putstr_fd("'\n", 2);
-}
-
-static void	print_exceed_size(int actual_line, int min, int max)
-{
-	ft_putstr_fd("Error\nValue must be in range [", 2);
-	ft_putnbr_fd(min, 2);
-	ft_putstr_fd(".0-", 2);
-	ft_putnbr_fd(max, 2);
-	ft_putstr_fd(".0], line : '", 2);
-	ft_putnbr_fd(actual_line, 2);
-	ft_putstr_fd("'\n", 2);
 }

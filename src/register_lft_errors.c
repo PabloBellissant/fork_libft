@@ -34,7 +34,12 @@ void	register_lft_errors(void)
 		LFT_E_MSG_VEC_ADD,
 		LFT_E_MSG_VEC_REALLOC,
 		LFT_E_MSG_CALC_S,
-		LFT_E_MSG_REALLOC
+		LFT_E_MSG_REALLOC,
+		LFT_E_MSG_NOT_FLT,
+		LFT_E_MSG_NOT_INT,
+		LFT_E_MSG_FLT_RANGE,
+		LFT_E_MSG_INT_RANGE,
+		LFT_E_MSG_WRN_CHAR
 	};
 	bulk_register_error(LFT_ERRS_NUM - 1, LFT_ID, (const char **)err_msgs);
 }

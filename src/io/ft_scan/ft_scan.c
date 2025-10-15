@@ -11,12 +11,11 @@
 /* ************************************************************************** */
 
 #include <stdarg.h>
-#include <unistd.h>
 #include "libft.h"
+#include "lft_xcerrcal.h"
 
 static void			skip_wildcard(const char **line, char char_to_skip);
 int					parse_type(va_list *args, const char **line, int line_num, const char *format);
-static void			wrong_char_error(int line_num, char needed, char found);
 static int			verif_char(const char *format, const char **line, int line_num);
 static const char	*skip_range(const char *format);
 
@@ -97,25 +96,11 @@ static int	verif_char(const char *format, const char **line, int line_num)
 	{
 		if (line_num == -1)
 			return (-1);
-		wrong_char_error(line_num, *format, **line);
-		return (-1);
+		register_complex_err_msg(LFT_E_MSG_WRN_CHAR, **line, *format);
+		return (error(pack_err(LFT_ID, LFT_E_WRN_CHAR), FL, LN, FC));
 	}
 	++*line;
 	return (0);
-}
-
-static void	wrong_char_error(int line_num, char needed, char found)
-{
-	ft_putstr_fd("Error\nIncorrect character detected, found '", 2);
-	write(2, &found, 1);
-	ft_putstr_fd("' expecting '", 2);
-	if (needed != '\n')
-		write(2, &needed, 1);
-	else
-		ft_putstr_fd("new_line", 2);
-	ft_putstr_fd("', line : '", 2);
-	ft_putnbr_fd(line_num, 2);
-	ft_putstr_fd("'\n", 2);
 }
 
 static void	skip_wildcard(const char **line, const char char_to_skip)
